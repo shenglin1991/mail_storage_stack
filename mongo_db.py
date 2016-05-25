@@ -27,3 +27,7 @@ def mongo_conn(conf=None):
         mongo[mongo_db_name(conf)].authenticate(user, password=pwd)
 
     return mongo
+
+
+def mongo_writer(db, content, placement='fragment_store'):
+    return db[placement].insert_one(content).inserted_id

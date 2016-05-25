@@ -2,18 +2,23 @@
 # vim:fileencoding=utf8
 # -*- coding: utf-8 -*-
 
+import json
+
 
 class LocalFS:
     def __init__(self, pathname=None):
         self.path = pathname if pathname else './'
 
-    def write(self, content, filename='default', mode='wb'):
-        with open(self.path + filename, mode) as fp:
-            fp.write(content)
-        return self.path + filename
+    def write(self, conn, content, placement='default', mode='wb'):
+        if isinstance(content, dict):
+            content = json.dumps(content)
 
-    def read(self, filename='default', mode='rb'):
-        with open(self.path + filename, mode) as fp:
+        with open(self.path + placement, mode) as fp:
+            fp.write(content)
+        return self.path + placement
+
+    def read(self, placement='default', mode='rb'):
+        with open(self.path + placement, mode) as fp:
             return fp.read()
 
     def __str__(self):
