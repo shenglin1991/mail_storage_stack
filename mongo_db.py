@@ -26,7 +26,7 @@ def mongo_conn(conf=None):
     if user and pwd:
         mongo[mongo_db_name(conf)].authenticate(user, password=pwd)
 
-    return mongo
+    return mongo[mongo_db_name(conf)]
 
 
 def mongo_writer(db, content, placement='fragment_store'):

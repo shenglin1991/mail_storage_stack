@@ -7,6 +7,14 @@ mongo:
     - 27017
   container_name: mongo
 
+mongo2:
+  image: mongo
+  ports:
+    - 27027:27017
+  expose:
+    - 27027
+  container_name: mongo2
+
 redis:
   image: redis
   ports:
