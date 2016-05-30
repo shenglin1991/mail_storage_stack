@@ -4,7 +4,7 @@ export PYTHONPATH=$HOME/workspace/storage_stack/
 run()
 {
     cd $HOME/workspace/
-    python mail_parser/mail_parser.py --filename=data/example.eml
+    python mail_parser/mail_parser.py --filename=data/example_without_attachment.eml
 }
 
 run
