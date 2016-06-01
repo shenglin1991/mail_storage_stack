@@ -29,5 +29,10 @@ def mongo_conn(conf=None):
     return mongo[mongo_db_name(conf)]
 
 
-def mongo_writer(db, content, placement='fragment_store'):
-    return db[placement].insert_one(content).inserted_id
+def mongo_writer(db, content, placement=None):
+    collection = 'fragment_store' if not placement else placement
+    return db[collection].insert_one(content).inserted_id
+
+
+def mongo_reader(db, collection, filtre):
+    return db[collection].find_one(filtre, {'_id': 0})
