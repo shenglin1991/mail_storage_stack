@@ -12,14 +12,21 @@ from message import redis_conn
 
 @click.command()
 @click.option('--id', default=None)
-def main(id):
+@click.option('--file-type', default='mail')
+def main(id, file_type):
     redis = redis_conn()
     if id:
         _id = ObjectId(id)
-    redis.publish('write', json.dumps({'collection': 'mails',
-                                       'target_collection': 'parsed_mails',
-                                       'target_storage': 'mongo_db2',
-                                       'filtre': {'_id': str(_id)}}))
+    if file_type == 'mail':
+        redis.publish('write', json.dumps({'collection': 'mails',
+                                           'target_collection': 'parsed_mails',
+                                           'target_storage': 'mongo_db2',
+                                           'filtre': {'_id': str(_id)}}))
+    elif file_type == 'pptx':
+        redis.publish('write', json.dumps({'collection': 'pptx',
+                                           'target_collection': 'parsed_pptx',
+                                           'target_storage': 'mongo_db2',
+                                           'filtre': {'_id': str(_id)}}))
 
 if __name__ == '__main__':
     main()
