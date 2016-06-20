@@ -15,24 +15,67 @@ def is_xml(string):
     return re.match('.*xml$', string) is not None
 
 
+def set_default_storage(db):
+    db.field_to_storage.find_one_and_update({'field': 'xml'},
+                                            {'$set': {
+                                               'storage': {
+                                                   'name': 'mongo_db',
+                                                   'type': 'db'}}},
+                                            upsert=True)
+    db.type_to_storage.find_one_and_update({'type': 'xml'},
+                                           {'$set': {
+                                               'storage': {
+                                                   'name': 'mongo_db',
+                                                   'type': 'db'}}},
+                                           upsert=True)
+
+    db.field_to_storage.find_one_and_update({'field': 'media'},
+                                            {'$set': {
+                                                'storage': {
+                                                    'name': 'mongo_db2',
+                                                    'type': 'db'}}},
+                                            upsert=True)
+    db.type_to_storage.find_one_and_update({'type': 'media'},
+                                           {'$set': {
+                                               'storage': {
+                                                   'name': 'mongo_db2',
+                                                   'type': 'db'}}},
+                                           upsert=True)
+
+
 def parsed_pptx(pptx):
-    structured_pptx = {}
+    structured_pptx = {
+        'xml': {
+            'name': 'xml',
+            'value': [],
+            'type': list.__name__
+        },
+        'media': {
+            'name': 'media',
+            'value': [],
+            'type': list.__name__
+        }
+    }
     for field in pptx.namelist():
         name = field.replace('.', '\u002E')
-        value = {
+        field_type = 'xml' if is_xml(name) else 'media'
+        field_body = {
             'name': name,
             'value': pptx.read(field).decode('latin-1').encode('utf-8'),
-            'type': 'xml' if is_xml(name) else 'media'
+            'type': field_type
         }
-        structured_pptx.update({name: value})
+        structured_pptx[field_type]['value'].append(field_body)
+
     return structured_pptx
 
 
 @click.command()
-@click.option('--conf', default=os.environ)
-@click.option('--pptx-file', default=None)
+@click.option('--conf', default=os.environ, help='configuration for db connexions and pptx_storage_scheme')
+@click.option('--pptx-file', default=None, help='indicate location of pptx original file')
 def parse(conf, pptx_file):
     db = mongo_conn(conf)
+    if not conf.get('pptx_storage_scheme'):
+        set_default_storage(db)
 
     print 'parse pptx and store intermediate parts in mongo'
 
