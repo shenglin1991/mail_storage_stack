@@ -54,8 +54,14 @@ def parsed_pptx(pptx):
             'name': 'media',
             'value': [],
             'type': list.__name__
+        },
+        'paths': {
+            'name': 'paths',
+            'value': '; '.join(pptx.namelist()),
+            'type': str.__name__
         }
     }
+
     for field in pptx.namelist():
         name = field.replace('.', '\u002E')
         field_type = 'xml' if is_xml(name) else 'media'
@@ -70,8 +76,8 @@ def parsed_pptx(pptx):
 
 
 @click.command()
-@click.option('--conf', default=os.environ, help='configuration for db connexions and pptx_storage_scheme')
-@click.option('--pptx-file', default=None, help='indicate location of pptx original file')
+@click.option('--conf', default=os.environ, help='Configuration for db connexions and pptx_storage_scheme')
+@click.option('--pptx-file', default=None, help='Indicate location of pptx original file')
 def parse(conf, pptx_file):
     db = mongo_conn(conf)
     if not conf.get('pptx_storage_scheme'):
