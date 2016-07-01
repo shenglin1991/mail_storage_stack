@@ -35,4 +35,6 @@ def mongo_writer(db, content, placement=None):
 
 
 def mongo_reader(db, collection, filtre):
+    if filtre.get('address'):
+        filtre.update({'_id': filtre.pop('address')})
     return db[collection].find_one(filtre, {'_id': 0})
