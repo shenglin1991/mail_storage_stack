@@ -9,7 +9,7 @@ import webbrowser
 import click
 from bson.objectid import ObjectId
 
-from mongo_db import mongo_conn, mongo_reader
+from storages.mongo_db import mongo_conn, mongo_reader
 
 
 def get_body(db, body):

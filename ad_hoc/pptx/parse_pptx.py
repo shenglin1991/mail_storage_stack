@@ -8,7 +8,7 @@ import zipfile
 
 import click
 
-from mongo_db import mongo_conn
+from storages.mongo_db import mongo_conn
 
 
 def is_xml(string):

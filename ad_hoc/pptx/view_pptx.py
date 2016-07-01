@@ -2,14 +2,14 @@
 # vim:fileencoding=utf8
 # -*- coding: utf-8 -*-
 
+import json
 import os
 import time
-import json
 import zipfile
 
 import click
 
-from message import redis_conn
+from storages.message import redis_conn
 
 
 def view(db, table, _id, file_name):

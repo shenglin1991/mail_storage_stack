@@ -2,12 +2,12 @@
 # vim:fileencoding=utf8
 # -*- coding: utf-8 -*-
 
-import os
 import email
+import os
 
 import click
 
-from mongo_db import mongo_conn
+from storages.mongo_db import mongo_conn
 from utils import parse_mail_to_dict
 
 

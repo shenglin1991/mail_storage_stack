@@ -5,9 +5,8 @@
 import json
 
 import click
-from bson.objectid import ObjectId
 
-from message import redis_conn
+from storages.message import redis_conn
 
 
 @click.command()
