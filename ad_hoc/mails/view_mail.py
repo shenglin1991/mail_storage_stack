@@ -4,11 +4,12 @@
 
 import os
 import time
+import json
 import webbrowser
 
 import click
-from bson.objectid import ObjectId
 
+from storages.message import redis_conn
 from storages.mongo_db import mongo_conn, mongo_reader
 
 
@@ -27,7 +28,24 @@ def get_body(db, body):
 
 
 def view(db, mail_table, mail_id, fields):
-    mail = mongo_reader(db, collection=mail_table, filtre={'_id': ObjectId(mail_id)})
+    mail = None
+    redis = redis_conn()
+    result_subscription = redis.pubsub(ignore_subscribe_messages=True)
+    result_subscription.subscribe('read_result')
+
+    redis.publish('read', json.dumps({
+        'storage': db,
+        'collection': mail_table,
+        'filtre': {
+            '_id': mail_id
+        }
+    }))
+
+    for msg in result_subscription.listen():
+        mail = json.loads(msg['data']).get('result')
+        break
+
+    # mail = mongo_reader(db, collection=mail_table, filtre={'_id': ObjectId(mail_id)})
 
     if not mail:
         raise ValueError('mail not found')

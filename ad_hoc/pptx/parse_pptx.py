@@ -12,7 +12,7 @@ from storages.mongo_db import mongo_conn
 
 
 def is_xml(string):
-    return re.match('.*xml$', string) is not None
+    return (re.match('.*xml$', string) is not None) or (re.match('.*rels$', string) is not None)
 
 
 def set_default_storage(db):
@@ -77,15 +77,15 @@ def parsed_pptx(pptx):
 
 @click.command()
 @click.option('--conf', default=os.environ, help='Configuration for db connexions and pptx_storage_scheme')
-@click.option('--pptx-file', default=None, help='Indicate location of pptx original file')
-def parse(conf, pptx_file):
+@click.option('--filename', default=None, help='Indicate location of pptx original file')
+def parse(conf, filename):
     db = mongo_conn(conf)
     if not conf.get('pptx_storage_scheme'):
         set_default_storage(db)
 
     print 'parse pptx and store intermediate parts in mongo'
 
-    pptx = zipfile.ZipFile(pptx_file, 'r')
+    pptx = zipfile.ZipFile(filename, 'r')
 
     parsed_id = db.pptx.insert_one(parsed_pptx(pptx)).inserted_id
 
