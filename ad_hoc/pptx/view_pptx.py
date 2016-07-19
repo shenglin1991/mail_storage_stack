@@ -36,8 +36,7 @@ def view(db, table, _id, file_name, path=None):
         }}
 
     if path:
-        path.replace('.xml', '\u002Exml').replace('.rels', '\u002Erel')
-        req.update({'projection': path})
+        req.update({'projection': path.replace('.xml', '\u002Exml').replace('.rels', '\u002Erel')})
 
     redis.publish('read', json.dumps(req))
 

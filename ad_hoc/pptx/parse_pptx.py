@@ -19,14 +19,14 @@ def set_default_storage(db):
     db.field_to_storage.find_one_and_update({'field': 'xml'},
                                             {'$set': {
                                                'storage': {
-                                                   'name': 'mongo_db',
-                                                   'type': 'db'}}},
+                                                   'name': 'ceph_hot',
+                                                   'type': 'fs'}}},
                                             upsert=True)
     db.type_to_storage.find_one_and_update({'type': 'xml'},
                                            {'$set': {
                                                'storage': {
-                                                   'name': 'mongo_db',
-                                                   'type': 'db'}}},
+                                                   'name': 'ceph_hot',
+                                                   'type': 'fs'}}},
                                            upsert=True)
 
     db.field_to_storage.find_one_and_update({'field': 'media'},
