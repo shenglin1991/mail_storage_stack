@@ -32,14 +32,14 @@ def set_default_storage(db):
     db.field_to_storage.find_one_and_update({'field': 'media'},
                                             {'$set': {
                                                 'storage': {
-                                                    'name': 'mongo_db2',
-                                                    'type': 'db'}}},
+                                                   'name': 'ceph_cold',
+                                                   'type': 'fs'}}},
                                             upsert=True)
     db.type_to_storage.find_one_and_update({'type': 'media'},
                                            {'$set': {
                                                'storage': {
-                                                   'name': 'mongo_db2',
-                                                   'type': 'db'}}},
+                                                   'name': 'ceph_cold',
+                                                   'type': 'fs'}}},
                                            upsert=True)
 
 
@@ -63,7 +63,7 @@ def parsed_pptx(pptx):
     }
 
     for field in pptx.namelist():
-        name = field.replace('.', '\u002E')
+        name = field.replace('.', '\u002E').replace('/', '\u2044')
         field_type = 'xml' if is_xml(name) else 'media'
         field_body = {
             'name': name,

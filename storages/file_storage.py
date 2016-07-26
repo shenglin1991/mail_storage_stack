@@ -28,4 +28,6 @@ class LocalFS:
 
 
 def file_storage(conf=None):
-    return (conf or {}).get('__FILE_STORAGE__', LocalFS(conf.get('name')))
+    conf = {} if not conf else conf
+    return LocalFS(pathname=conf.get('pathname'),
+                   name=conf.get('name'))

@@ -4,7 +4,7 @@ export PYTHONPATH=$HOME/workspace/storage_stack/
 run()
 {
     cd $HOME/workspace/
-    python fragment_storage/store.py
+    sudo python fragment_storage/store.py
 }
 
 run 
