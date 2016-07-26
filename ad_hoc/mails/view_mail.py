@@ -64,14 +64,15 @@ def view(db, mail_table, mail_id, fields):
 @click.command()
 @click.option('--id', default=None)
 @click.option('--fields', default='Subject,From,To')
-def main(id, fields, conf=os.environ, db=None):
-    if db is None:
-        db = mongo_conn({
+def main(id, fields, conf=os.environ, default_mail_storage=None):
+    if not default_mail_storage:
+        default_mail_storage = mongo_conn({
             '__DB_ADDR__': conf.get('__DB_ADDR__', 'localhost:27027')
         })
 
+    print 'Start visualizing email'
     start = time.time()
-    view(db, conf.get('mail_table', 'parsed_mails'), id, fields.split(','))
+    view(default_mail_storage, conf.get('mail_table', 'parsed_mails'), id, fields.split(','))
     print 'visual time: {}ms'.format(int((time.time() - start) * 1000))
 
 
