@@ -16,9 +16,9 @@ def get_body(body):
     body_value = ''
     if isinstance(body, list):
         for part in body:
-            body_value += part.get('value')
+            body_value += get_body(part.get('value'))
     else:
-        body_value += body.get('value')
+        body_value += body
     return body_value
 
 

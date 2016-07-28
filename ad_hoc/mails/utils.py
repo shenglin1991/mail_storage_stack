@@ -35,7 +35,7 @@ def extract_name(content_type):
 
 def unicode_payload(payload):
     # TODO : support all encodings, currently only for cp1252
-    return payload.decode('latin-1').encode('utf-8')
+    return payload.decode('latin-1')
 
 
 def parse_multipart(part):
